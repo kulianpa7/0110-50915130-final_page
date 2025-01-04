@@ -5,6 +5,7 @@ const supabase = createClient(
 )
 
 $(document).ready(function () {
+    setupRealtimeUpdates("13520");
     $('#signup_s').on('click', async function (e) {
         e.preventDefault();
         // 取得用戶輸入的數據
@@ -64,7 +65,7 @@ $(document).ready(function () {
         // 檢查是否存在該用戶資料
         const { data: existingUser, error: checkError } = await supabase
             .from('users')  // 指定資料表
-            .select('user_id')  // 查詢 user_id
+            .select('user_id,money,name')  // 查詢 user_id
             .eq('user_id', userId)  // 檢查是否有相同的 user_id
             .single();  // 只獲取一個結果
         if (checkError) {
@@ -75,7 +76,14 @@ $(document).ready(function () {
         // 移除所有帶有 disabled-link 類的連結
         $('.nav-link').removeClass('disabled-link');
         // 設定 cookie auth=true，有效期為 1 小時（可以根據需求調整）
-        document.cookie = "auth=true; path=/; max-age=" + 60 * 60 * 10;  // 設定 cookie 的有效期為 1 小時
+        document.cookie = `auth=true; path=/; max-age=` + 60 * 60 * 10;  // 設定 cookie 的有效期為 1 小時
+        if($("#balanceAmount").length===0){
+            $('.moneys').append(`
+                <span class="navbar-text text-white">
+              餘額: <span id="balanceAmount">${existingUser.money}</span> 元
+            </span>
+        `)
+        }
         if($("#logout").length === 0)
             $(".logout").append(`<button type="submit" class="btn btn-warning w-10" id="logout">登出</button>`);
         $("#logout").on('click', function() {
@@ -90,3 +98,26 @@ $(document).ready(function () {
         // 進行後續操作，例如儲存登入狀態，跳轉頁面等
     });
 });
+// 設置實時訂閱，並過濾特定 id 和 balanceAmount 值
+function setupRealtimeUpdates(id) {
+    const channel = supabase
+        .channel('realtime:users')
+        .on(
+            'postgres_changes',
+            { 
+                event: '*', 
+                schema: 'public', 
+                table: 'users',
+                filter: `user_id=eq.${id}`  // 設定篩選條件
+            },
+            payload => {
+                console.log('Realtime update for specific ID and balanceAmount:', payload);
+                if(payload.eventType ==="UPDATE"){
+                    $("#balanceAmount").text(payload.new.money);
+                }
+            }
+        )
+        .subscribe();
+
+    return channel;
+}
