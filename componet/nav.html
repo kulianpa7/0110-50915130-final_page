@@ -1,38 +1,67 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/index.html">遊樂園系統</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="page/shop.html">消費</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="page/deposit.html">會員儲值</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="page/bank_balance.html">餘額查詢</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="page/payment_record.html">消費紀錄</a>
-                </li>
-            </ul>
-            <div class="d-flex align-items-center">
-                <!-- Google Translate -->
-                <div id="google_translate_element" class="me-3"></div>
-                <!-- Login Button -->
-                <button class="btn btn-outline-light" type="button" onclick="location.href='login.html'">登入</button>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/index.html">遊樂園系統</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav" style="user-select: none;">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/shop.html" id="shopLink">消費</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/deposit.html" id="depositLink">會員儲值</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/bank_balance.html" id="balanceLink">餘額查詢</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/payment_record.html" id="recordLink">消費紀錄</a>
+        </li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <!-- Google Translate -->
+        <div id="google_translate_element" class="me-3"></div>
+      </div>
     </div>
+  </div>
 </nav>
+
 
 <!-- Google Translate Script -->
 <script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'zh-TW', includedLanguages: 'zh-TW,en,zh-CN,ja'}, 'google_translate_element');
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'zh-TW',
+      includedLanguages: 'zh-TW,en,zh-CN,ja'
+    }, 'google_translate_element');
+  }
+</script>
+<script>
+    // 檢查是否存在 'auth=true' 的 cookie
+    const cookies = document.cookie.split(';');
+    let authStatus = false;
+
+    cookies.forEach(function(cookie) {
+        if (cookie.trim().startsWith("auth=")) {
+            const cookieValue = cookie.split('=')[1].trim();
+            if (cookieValue === 'true') {
+                authStatus = true; // 如果 auth=true，設置 authStatus 為 true
+            }
+        }
+    });
+
+    // 如果 authStatus 為 true，移除所有 disabled-link 類
+    if (authStatus) {
+        $('.nav-link').removeClass('disabled-link');
     }
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<style>
+  .disabled-link {
+    pointer-events: none;
+    /* 禁止點擊 */
+    opacity: 0.5;
+    /* 改變外觀，讓禁用的連結顯得灰色 */
+  }
+</style>
