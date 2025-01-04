@@ -22,6 +22,7 @@
       <div class="d-flex align-items-center">
         <!-- Google Translate -->
         <div id="google_translate_element" class="me-3"></div>
+        <div class="logout"></div>
       </div>
     </div>
   </div>
@@ -38,23 +39,28 @@
   }
 </script>
 <script>
-    // 檢查是否存在 'auth=true' 的 cookie
-    const cookies = document.cookie.split(';');
-    let authStatus = false;
+  // 檢查是否存在 'auth=true' 的 cookie
+  const cookies = document.cookie.split(';');
+  let authStatus = false;
 
-    cookies.forEach(function(cookie) {
-        if (cookie.trim().startsWith("auth=")) {
-            const cookieValue = cookie.split('=')[1].trim();
-            if (cookieValue === 'true') {
-                authStatus = true; // 如果 auth=true，設置 authStatus 為 true
-            }
-        }
-    });
-
-    // 如果 authStatus 為 true，移除所有 disabled-link 類
-    if (authStatus) {
-        $('.nav-link').removeClass('disabled-link');
+  cookies.forEach(function(cookie) {
+    if (cookie.trim().startsWith("auth=")) {
+      const cookieValue = cookie.split('=')[1].trim();
+      if (cookieValue === 'true') {
+        $(".logout").append(`<button type="submit" class="btn btn-warning w-10" id="logout">登出</button>`);
+        $("#logout").on('click', function() {
+          document.cookie = "auth=false; path=/;"; // 設定 cookie 的有效期為 1 小時
+          window.location.href = '/index.html';
+        })
+        authStatus = true; // 如果 auth=true，設置 authStatus 為 true
+      }
     }
+  });
+
+  // 如果 authStatus 為 true，移除所有 disabled-link 類
+  if (authStatus) {
+    $('.nav-link').removeClass('disabled-link');
+  }
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <style>
