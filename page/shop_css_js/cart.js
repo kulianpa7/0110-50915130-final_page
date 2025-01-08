@@ -17,9 +17,11 @@ function updateCartDisplay() {
     const cartItemsContainer = document.querySelector('.cart-items');
     const cartCount = document.querySelector('.cart-count');
     const totalAmount = document.querySelector('.total-amount');
-    
+
+    // 更新购物车数量
     cartCount.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
+    // 渲染购物车项
     cartItemsContainer.innerHTML = cartItems.map((item, index) => `
         <div class="cart-item">
             <img src="${item.url}" alt="${item.names}">
@@ -36,9 +38,11 @@ function updateCartDisplay() {
         </div>
     `).join('');
 
+    // 更新总金额
     const total = cartItems.reduce((sum, item) => sum + item.cost * item.quantity, 0);
     totalAmount.textContent = `NT$ ${total}`;
 }
+
 
 // 修改商品數量
 function changeQuantity(index, delta) {
@@ -58,26 +62,32 @@ function removeCartItemWithAnimation(index) {
         cartItem.addEventListener('animationend', () => {
             cartItems.splice(index, 1);  // 从数组中删除
             updateCartDisplay();  // 更新购物车显示
-        });
+        }, { once: true }); // 确保动画结束后只触发一次更新
     }
 }
+
+
 // 移除商品
 function removeFromCart(index) {
-    removeCartItemWithAnimation(index);  // 调用带动画的删除函数
+    removeCartItemWithAnimation(index);
 }
+
+
 
 // 初始化購物車功能
 function initCart() {
     const cartCounter = document.querySelector('.cart-counter');
     const cartSidebar = document.querySelector('.cart-sidebar');
-    const cartClose = document.querySelector('.cart-close'); // 关闭购物车按钮
+    const cartClose = document.querySelector('.cart-close');
 
     cartCounter.addEventListener('click', () => {
         cartSidebar.classList.add('open');
     });
 
-    cartClose.addEventListener('click', function() {
-        cartSidebar.classList.remove('open'); // 只关闭购物车，不删除任何内容
+    // 修改關閉按鈕的邏輯
+    cartClose.addEventListener('click', function () {
+        // 直接關閉側邊欄，不清空購物車
+        cartSidebar.classList.remove('open');
     });
 }
 

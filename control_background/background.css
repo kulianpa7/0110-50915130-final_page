@@ -1,0 +1,4 @@
+.play-blur-animation::before {
+    animation: blurAnimation 1s ease-in-out forwards;
+    /* 应用动画 */
+  }
