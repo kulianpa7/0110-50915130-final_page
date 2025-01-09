@@ -2,30 +2,16 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>遊樂園系統</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="index.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js" async=""></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <!-- 引入 SweetAlert2 的 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.6/dist/sweetalert2.min.css" rel="stylesheet">
-  <!-- 引入 SweetAlert2 的 JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.6/dist/sweetalert2.all.min.js"></script>
   <script>
     // 獲取當前執行環境的 hostname
     const hostname = window.location.hostname;
-  
+    console.log("hostname",hostname)
     // 動態設定 <base> 標籤
     const base = document.createElement('base');
     if (hostname === '127.0.0.1' || hostname === 'localhost') {
-        base.href = 'http://127.0.0.1:5500/'; // 本地測試環境
+        base.href = 'http://127.0.0.1:5500/page'; // 本地測試環境
     } else {
-        base.href = 'https://kulianpa7.github.io/0110-50915130-final_page/'; // GitHub Pages
+        base.href = 'https://kulianpa7.github.io/0110-50915130-final_page/page'; // GitHub Pages
     }
     document.head.appendChild(base);
   </script>
@@ -44,6 +30,21 @@
       }
     });
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>遊樂園系統</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/page/index/index.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.0/lazysizes.min.js" async=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <!-- 引入 SweetAlert2 的 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.6/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- 引入 SweetAlert2 的 JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.6/dist/sweetalert2.all.min.js"></script>
+
   <style>
     .play-blur-animation::before {
       animation: blurAnimation 1s ease-in-out forwards;
@@ -62,7 +63,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url("background.jpeg");
+      background-image: url("/page/index/background.jpeg");
       background-size: cover;
       background-repeat: no-repeat;
       background-attachment: fixed;
@@ -142,21 +143,21 @@
       <!-- Slides -->
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="active1.jpg" class="d-block w-100" alt="First Slide">
+          <img src="/page/index/active1.jpg" class="d-block w-100" alt="First Slide">
           <div class="carousel-caption d-none d-md-block bg-transport">
             <h5>大馬遊樂園</h5>
             <p>這裡有許多遊樂設施 像是 摩天輪 雲霄飛車 地心探險</p>
           </div>
         </div>
         <div class="carousel-item">
-          <img src="active2.jpg" class="d-block w-100" alt="First Slide">
+          <img src="/page/index/active2.jpg" class="d-block w-100" alt="First Slide">
           <div class="carousel-caption d-none d-md-block bg-transport">
             <h5>中午美食</h5>
             <p>馬樂園廣場有主題攤販販售食物</p>
           </div>
         </div>
         <div class="carousel-item">
-          <img src="active3.jpg" class="d-block w-100" alt="First Slide">
+          <img src="/page/index/active3.jpg" class="d-block w-100" alt="First Slide">
           <div class="carousel-caption d-none d-md-block bg-transport">
             <h5>折扣優惠</h5>
             <p>只要滿899 或者是身分證有2 3 5 就可以以499的金額入場</p>
@@ -184,11 +185,11 @@
   </div>
 
   </div>
-  <script src="E_charts.js"></script>
+  <script src="/page/index/E_charts.js"></script>
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <div id="footer-placeholder"></div>
-  <script src="componet.js"></script>
-  <script src="index.js"></script>
-  <script type="module" src="index_supabase.js"></script>
+  <script src="/componet.js"></script>
+  <script src="/page/index/index.js"></script>
+  <script type="module" src="/page/index/index_supabase.js"></script>
 </body>
