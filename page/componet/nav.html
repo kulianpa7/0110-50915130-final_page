@@ -1,0 +1,150 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/index.html">遊樂園系統</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav" style="user-select: none;">
+      <!-- 左側導航選單 -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/shop.html">消費</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/deposit.html">會員儲值</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled-link" href="page/payment_record.html">消費紀錄</a>
+        </li>
+      </ul>
+
+      <!-- 右側其他內容 -->
+      <div class="d-flex align-items-center ms-auto">
+        <div class="moneys me-3"></div>
+        <div id="google_translate_element" class="me-3"></div>
+
+        <div class="logout"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Google Translate Script -->
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'zh-TW',
+      includedLanguages: 'zh-TW,en,zh-CN,ja'
+    }, 'google_translate_element');
+  }
+</script>
+<script>
+  const cookiesc = document.cookie.split(";").map(ele => ele.trim());
+  // 將數據轉換為 JSON 對象
+  const cookieJsonsc = cookiesc.reduce((acc, item) => {
+    const [key, value] = item.split('=');
+    acc[key] = value;
+    return acc;
+  }, {});
+  console.log("test = ",cookieJsonsc);
+  // 檢查是否存在 'auth=true' 的 cookie
+  const cookies = document.cookie.split(';');
+  let authStatus = false;
+  cookies.forEach(function(cookie) {
+    if (cookie.trim().startsWith("money=")) {
+      const cookieValue = cookie.split('=')[1].trim();
+      $('.moneys').append(`
+          <span class="navbar-text text-white">
+          餘額: <span id="balanceAmount">${cookieValue}</span> 元
+          </span>`)
+    }
+    if (cookie.trim().startsWith("auth=")) {
+
+      const cookieValue = cookie.split('=')[1].trim();
+      console.log("cookieValue", cookieValue)
+      if (cookieValue === 'true') {
+        authStatus = true; // 如果 auth=true，設置 authStatus 為 true
+      }
+    }
+  });
+
+  // 如果 authStatus 為 true，移除所有 disabled-link 類
+  if (authStatus) {
+    console.log("IUNIN")
+    $(".logout").append(`<button type="submit" class="btn btn-warning w-10" id="logout">登出</button>`);
+    $("#logout").on('click', function() {
+      // 清空 cookie
+      document.cookie = "auth=false; path=/;";
+      document.cookie = "user_id=; path=/; max-age=0;";
+      document.cookie = "money=; path=/; max-age=0;";
+      document.cookie = "name=; path=/; max-age=0;";
+      window.location.reload(); // 刷新頁面
+    });
+    $('.nav-link').removeClass('disabled-link');
+  }
+</script>
+
+<script type="module">
+  import {
+    createClient
+  } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  const supabase = createClient(
+    'https://lfkfdizfmxzuuszmakod.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxma2ZkaXpmbXh6dXVzem1ha29kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEyMjU1NDAsImV4cCI6MjA0NjgwMTU0MH0.5XRn9ePxrdgCtLj0znyVXoOYs6l1fmgQaYjSNzo73Wc'
+  )
+  // 設置實時訂閱，並過濾特定 id 和 balanceAmount 值
+  async function setupRealtimeUpdates(id) {
+    // 檢查是否存在該用戶資料
+    const {
+      data: existingUser,
+      error: checkError
+    } = await supabase
+      .from('users') // 指定資料表
+      .select('user_id,money,name') // 查詢 user_id
+      .eq('user_id', id) // 檢查是否有相同的 user_id
+      .single(); // 只獲取一個結果
+    // 設定 cookie，保存 user_id, money, 和 name，有效期為 1 小時（3600 秒）
+    document.cookie = `user_id=${existingUser.user_id}; path=/; max-age=${60 * 60}`;
+    document.cookie = `money=${existingUser.money}; path=/; max-age=${60 * 60}`;
+    document.cookie = `name=${existingUser.name}; path=/; max-age=${60 * 60}`;
+    const channel = supabase
+      .channel('realtime:users')
+      .on(
+        'postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'users',
+          filter: `user_id=eq.${id}` // 設定篩選條件
+        },
+        payload => {
+          console.log('Realtime update for specific ID and balanceAmount:', payload);
+          if (payload.eventType === "UPDATE") {
+            document.cookie = `money=${payload.new.money}; path=/; max-age=${60 * 60}`;
+            $("#balanceAmount").text(payload.new.money);
+          }
+        }
+      )
+      .subscribe();
+    return channel;
+  }
+
+  const cookie = document.cookie.split(";").map(ele => ele.trim());
+  // 將數據轉換為 JSON 對象
+  const cookieJson = cookie.reduce((acc, item) => {
+    const [key, value] = item.split('=');
+    acc[key] = value;
+    return acc;
+  }, {});
+  if (cookieJson.auth)
+    setupRealtimeUpdates(cookieJson.user_id);
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<style>
+  .disabled-link {
+    pointer-events: none;
+    /* 禁止點擊 */
+    opacity: 0.5;
+    /* 改變外觀，讓禁用的連結顯得灰色 */
+  }
+</style>
