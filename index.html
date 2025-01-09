@@ -31,6 +31,19 @@
       }
     });
   </script>
+  <script>
+    // 獲取當前執行環境的 hostname
+    const hostname = window.location.hostname;
+  
+    // 動態設定 <base> 標籤
+    const base = document.createElement('base');
+    if (hostname === '127.0.0.1' || hostname === 'localhost') {
+        base.href = 'http://127.0.0.1:5500/'; // 本地測試環境
+    } else {
+        base.href = 'https://kulianpa7.github.io/0110-50915130-final_page/'; // GitHub Pages
+    }
+    document.head.appendChild(base);
+  </script>
   <style>
     .play-blur-animation::before {
       animation: blurAnimation 1s ease-in-out forwards;
