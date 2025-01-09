@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECharts 範例</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+
+<body>
+  <!-- 放置圖表的容器 -->
+    <div class="row">
+        <div class="col">
+            <div id="main" style="width: 600px; height: 400px;"></div>
+        </div>
+        <div class="col">
+            <div id="main2" style="width: 600px; height: 400px;"></div>
+        </div>
+    </div>
+  <script>
+    // 初始化 ECharts
+    var chart = echarts.init(document.getElementById('main'));
+    var chart2 = echarts.init(document.getElementById('main2'));
+
+    // 設定圖表的配置
+    var option = {
+      title: {
+        text: '遊樂園總人數',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['遊樂園總人數'],
+        top: '10%'
+      },
+      xAxis: {
+        type: 'category',
+        data: ['週一', '週二', '週三', '週四', '週五', '週六', '週日']
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: '{value} 萬'
+        }
+      },
+      series: [{
+        name: '遊樂園總人數',
+        type: 'line',
+        data: [132, 821, 203, 444, 122, 182, 891],
+        smooth: false,
+        itemStyle: {
+          color: '#5470C6'
+        }
+      }]
+    };
+
+    // 使用設定的配置繪製圖表
+    chart.setOption(option);
+  </script>
+  <script>
+    // 初始化圖表
+    var chart2 = echarts.init(document.getElementById('main2'));
+
+    // 設定圖表的配置
+    var option = {
+      title: {
+        text: '園內總消費金額分佈',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} 元 ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['門票', '飲食', '遊樂設施', '停車費', '其他']
+      },
+      series: [{
+        name: '消費項目',
+        type: 'pie',
+        radius: '50%',
+        label: {
+          show: true,
+          position: 'inside', // 將文字顯示在扇區內
+          formatter: '{b}\n{c} 萬元 ({d}%)', // 顯示名稱、金額和百分比
+          fontSize: 12,
+          color: '#fff' // 設置文字顏色（適合深色背景）
+        },
+        data: [{
+            value: 238,
+            name: '門票'
+          },
+          {
+            value: 12,
+            name: '飲食'
+          },
+          {
+            value: 38,
+            name: '遊樂設施'
+          },
+          {
+            value: 12,
+            name: '停車費'
+          },
+          {
+            value: 68,
+            name: '其他'
+          }
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }]
+    };
+
+    // 使用設定的配置繪製圖表
+    chart2.setOption(option);
+  </script>
+</body>
+
+</html>
