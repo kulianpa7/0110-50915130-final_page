@@ -10,6 +10,19 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="deposit_css_js/deposit.css">
     </head>
+    <script>
+        // 獲取當前執行環境的 hostname
+        const hostname = window.location.hostname;
+      
+        // 動態設定 <base> 標籤
+        const base = document.createElement('base');
+        if (hostname === '127.0.0.1' || hostname === 'localhost') {
+            base.href = 'http://127.0.0.1:5500/'; // 本地測試環境
+        } else {
+            base.href = 'https://kulianpa7.github.io/0110-50915130-final_page/'; // GitHub Pages
+        }
+        document.head.appendChild(base);
+    </script>
 <body>
     <div id="nav-placeholder"></div>
 
@@ -75,18 +88,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script type="module" src="deposit_css_js/deposit.js"></script>
-    <script>
-        // 獲取當前執行環境的 hostname
-        const hostname = window.location.hostname;
-      
-        // 動態設定 <base> 標籤
-        const base = document.createElement('base');
-        if (hostname === '127.0.0.1' || hostname === 'localhost') {
-            base.href = 'http://127.0.0.1:5500/'; // 本地測試環境
-        } else {
-            base.href = 'https://kulianpa7.github.io/0110-50915130-final_page/'; // GitHub Pages
-        }
-        document.head.appendChild(base);
-      </script>
 </body>
 </html>
