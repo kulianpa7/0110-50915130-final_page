@@ -106,7 +106,7 @@ var option = {
         label: {
             show: true,
             position: 'inside', // 將文字顯示在扇區內
-            formatter: '{b}\n{c} 萬元 ({d}%)', // 顯示名稱、金額和百分比
+            formatter: '{b}\n{c} 元 ({d}%)', // 顯示名稱、金額和百分比
             fontSize: 12,
             color: '#fff' // 設置文字顏色（適合深色背景）
         },
