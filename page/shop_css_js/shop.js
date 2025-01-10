@@ -184,7 +184,7 @@ async function checkout() {
             return;
         }
 
-        // 更新余额到 Supabase
+        // 更新餘額到 Supabase
         const newBalance = currentBalance - total;
         const { data: updatedData, error: updateError } = await supabase
             .from('users')
@@ -192,8 +192,11 @@ async function checkout() {
             .eq('user_id', userId);
 
         if (updateError) {
-            console.error('更新余额失败:', updateError.message);
+            console.error('更新餘額失败:', updateError.message);
+            const utterance = new SpeechSynthesisUtterance(`結帳失敗，無法更新餘額`);
+            speechSynthesis.speak(utterance);
             throw new Error(`結帳失敗，無法更新餘額：${updateError.message}`);
+
         }
         const utterance = new SpeechSynthesisUtterance(`結帳成功 扣除 ${total}元`);
         speechSynthesis.speak(utterance);

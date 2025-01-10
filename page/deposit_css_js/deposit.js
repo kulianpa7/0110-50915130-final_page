@@ -119,8 +119,8 @@ $(document).ready(async function () {
 
                 const utterance = new SpeechSynthesisUtterance(`儲值的金額是 ${amount} 元 現在是 ${newBalance} 元`);
                 speechSynthesis.speak(utterance);
-                console.log('当前余额:', currentBalance);
-                console.log('新余额:', newBalance);
+                console.log('當前餘额:', currentBalance);
+                console.log('新餘额:', newBalance);
     
                 // 更新余额到 Supabase
                 const { data: updatedData, error: updateError } = await supabase
@@ -129,7 +129,7 @@ $(document).ready(async function () {
                     .eq('user_id', cookies.user_id);
     
                 if (updateError) {
-                    console.error('更新余额失败:', updateError.message);
+                    console.error('更新餘额失敗:', updateError.message);
                     throw new Error(`儲值失敗，無法更新餘額：${updateError.message}`);
                 }else{
                     await supabase
@@ -137,7 +137,7 @@ $(document).ready(async function () {
                         .insert({user_id:cookies.user_id,deposit:amount})
                 }
                 
-                console.log('更新后的数据:', updatedData);
+                console.log('更新後的數據:', updatedData);
 
                 Swal.fire({
                     icon: 'success',
